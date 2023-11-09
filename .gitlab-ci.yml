@@ -57,6 +57,7 @@ aws-auth:
   tags:
       - gitlab-shared-runner
   stage: terraform
+  image: ${IMAGE}
   extends:
     - .0-terraform-init
   dependencies: ["vault-job"]
