@@ -58,7 +58,6 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
-    - .tf-config
     - .0-terraform-init
   dependencies: ["vault-job"]
   needs: ["vault-job"]
@@ -68,7 +67,6 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
-    - .tf-config
     - .1-terraform-fmt
   dependencies: ["vault-job","0-terraform-init"]
   needs: ["vault-job", "0-terraform-init" ]
@@ -78,7 +76,6 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
-    - .tf-config
     - .2-terraform-validate
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt"]
   needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
@@ -88,7 +85,6 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
-    - .tf-config
     - .3-terraform-plan
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
@@ -98,7 +94,6 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
-    - .tf-config
     - .4-terraform-apply
     - .rules-config
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
@@ -109,7 +104,6 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
-    - .tf-config
     - .5-terraform-destroy
     - .rules-config
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
