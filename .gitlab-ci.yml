@@ -1,0 +1,113 @@
+variables:
+  VAULT_AUTH_ROLE: 'myproject-staging'
+  AWS_DEFAULT_REGION : 'us-east-1'
+  VAULT_ADDR: 'http://3.226.190.247:8200'
+  IMAGE: "hashicorp/vault:latest"
+  TERRAFORM_DIR_APP: "terraform/resources/1_application"
+  ENV: "dev"
+
+include:
+  - project: 'aqt/vault-authentication'
+    file:
+      - 'templates/vault-aws-auth.yml'
+  - project: 'aqt/vault-authentication'
+    file:
+      - 'templates/terraform.yml'
+
+.rules-config:
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+      when: manual
+
+stages:
+    - authenticate
+    - awscli
+    - terraform
+
+vault-job:
+    image: hashicorp/vault:latest
+    tags:
+      - gitlab-shared-runner
+    stage: authenticate
+    extends: 
+      - .vault-aws-auth
+      - .rules-config
+
+aws-auth:
+    tags:
+      - gitlab-shared-runner
+    stage: awscli
+    image: amazon/aws-cli:latest
+    extends:
+        - .aws-cli
+    dependencies: ["vault-job"]
+    needs: ["vault-job"]
+
+terraform-init:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .tf-config
+    - .0-terraform-init
+    - .rules-config
+  dependencies: ["vault-job"]
+  needs: ["vault-job"]
+
+terraform-fmt:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .tf-config
+    - .1-terraform-fmt
+    - .rules-config
+  dependencies: ["vault-job"]
+  needs: ["vault-job", "terraform-init" ]
+
+terraform-validate:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .tf-config
+    - .2-terraform-validate
+    - .rules-config
+  dependencies: ["vault-job"]
+  needs: ["vault-job", "terraform-init" ]
+
+terraform-plan:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .tf-config
+    - .3-terraform-plan
+    - .rules-config
+  dependencies: ["vault-job"]
+  needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate" ]
+
+terraform-apply:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .tf-config
+    - .4-terraform-apply
+    - .rules-config
+  dependencies: ["vault-job", "terraform-plan" ]
+  needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate", "terraform-plan" ]
+
+terraform-destroy:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .tf-config
+    - .5-terraform-destroy
+    - .rules-config
+  dependencies: ["vault-job", "terraform-plan" ]
+  needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate", "terraform-plan" ]
+
+
+  
