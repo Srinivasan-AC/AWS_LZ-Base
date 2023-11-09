@@ -63,7 +63,7 @@ terraform-fmt:
     - .tf-config
     - .1-terraform-fmt
     - .rules-config
-  dependencies: ["vault-job"]
+  dependencies: ["vault-job","terraform-init"]
   needs: ["vault-job", "terraform-init" ]
 
 terraform-validate:
@@ -74,8 +74,8 @@ terraform-validate:
     - .tf-config
     - .2-terraform-validate
     - .rules-config
-  dependencies: ["vault-job"]
-  needs: ["vault-job", "terraform-init","terraform-fmt" ]
+  dependencies: ["vault-job","terraform-init","terraform-fmt"]
+  needs: ["vault-job","terraform-init","terraform-fmt" ]
 
 terraform-plan:
   tags:
@@ -85,30 +85,32 @@ terraform-plan:
     - .tf-config
     - .3-terraform-plan
     - .rules-config
-  dependencies: ["vault-job"]
+  dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate"]
   needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate" ]
 
 terraform-apply:
   tags:
       - gitlab-shared-runner
   stage: terraform
+  when: manual
   extends:
     - .tf-config
     - .4-terraform-apply
     - .rules-config
-  dependencies: ["vault-job", "terraform-plan" ]
-  needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate", "terraform-plan" ]
+  dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
+  needs: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
 
 terraform-destroy:
   tags:
       - gitlab-shared-runner
   stage: terraform
+  when: manual
   extends:
     - .tf-config
     - .5-terraform-destroy
     - .rules-config
-  dependencies: ["vault-job", "terraform-plan" ]
-  needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate", "terraform-plan" ]
+  dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
+  needs: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
 
 
   
