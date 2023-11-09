@@ -75,7 +75,7 @@ terraform-validate:
     - .2-terraform-validate
     - .rules-config
   dependencies: ["vault-job"]
-  needs: ["vault-job", "terraform-init" ]
+  needs: ["vault-job", "terraform-init","terraform-fmt" ]
 
 terraform-plan:
   tags:
