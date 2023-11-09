@@ -3,7 +3,7 @@ variables:
   VAULT_AUTH_ROLE: 'myproject-staging'
   AWS_DEFAULT_REGION : 'us-east-1'
   VAULT_ADDR: 'http://3.226.190.247:8200'
-  IMAGE: "hashicorp/terraform:latest"
+  IMAGE: "hashicorp/terraform:1.2.7"
   TERRAFORM_DIR_APP: "terraform/resources/1_application"
   ENV: "dev"
 
@@ -23,7 +23,7 @@ include:
 stages:
     - authenticate
     - awscli
-    #- terraform-init
+    - terraform-init
     - terraform
 
 vault-job:
@@ -45,12 +45,12 @@ aws-auth:
     dependencies: ["vault-job"]
     needs: ["vault-job"]
 
-# init: 
-#   image: ${IMAGE}
-#   tags:
-#       - gitlab-shared-runner
-#   script:
-#     - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
+init: 
+  image: ${IMAGE}
+  tags:
+      - gitlab-shared-runner
+  script:
+    - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
 
 
 0-terraform-init:
