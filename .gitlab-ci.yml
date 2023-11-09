@@ -44,10 +44,12 @@ aws-auth:
     dependencies: ["vault-job"]
     needs: ["vault-job"]
 
-terraform-init:
+0-terraform-init:
+  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
+  when: always
   extends:
     - .tf-config
     - .0-terraform-init
@@ -55,10 +57,12 @@ terraform-init:
   dependencies: ["vault-job"]
   needs: ["vault-job"]
 
-terraform-fmt:
+1-terraform-fmt:
+  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
+  when: always
   extends:
     - .tf-config
     - .1-terraform-fmt
@@ -66,10 +70,12 @@ terraform-fmt:
   dependencies: ["vault-job","terraform-init"]
   needs: ["vault-job", "terraform-init" ]
 
-terraform-validate:
+2-terraform-validate:
+  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
+  when: always
   extends:
     - .tf-config
     - .2-terraform-validate
@@ -77,10 +83,12 @@ terraform-validate:
   dependencies: ["vault-job","terraform-init","terraform-fmt"]
   needs: ["vault-job","terraform-init","terraform-fmt" ]
 
-terraform-plan:
+3-terraform-plan:
+  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
+  when: always
   extends:
     - .tf-config
     - .3-terraform-plan
@@ -88,7 +96,8 @@ terraform-plan:
   dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate"]
   needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate" ]
 
-terraform-apply:
+4-terraform-apply:
+  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
@@ -100,7 +109,8 @@ terraform-apply:
   dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
   needs: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
 
-terraform-destroy:
+5-terraform-destroy:
+  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
