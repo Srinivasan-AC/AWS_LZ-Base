@@ -50,8 +50,8 @@ init:
   stage: terraform-init
   tags:
       - gitlab-shared-runner
-  before_script:
-    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
+  #before_script:
+  #  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
   script:
     - echo "terraform init running on ${TERRAFORM_DIR_APP} directory and ${ENV} as environment"
     - terraform -chdir=${TERRAFORM_DIR_APP} init -backend-config="../../environments/${ENV}/terraform.backendconfig"
