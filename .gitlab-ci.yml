@@ -3,7 +3,7 @@ variables:
   VAULT_AUTH_ROLE: 'myproject-staging'
   AWS_DEFAULT_REGION : 'us-east-1'
   VAULT_ADDR: 'http://3.226.190.247:8200'
-  IMAGE: "hashicorp/vault:latest"
+  IMAGE: "hashicorp/terraform:latest"
   TERRAFORM_DIR_APP: "terraform/resources/1_application"
   ENV: "dev"
 
@@ -45,7 +45,6 @@ aws-auth:
     needs: ["vault-job"]
 
 0-terraform-init:
-  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
@@ -58,7 +57,6 @@ aws-auth:
   needs: ["vault-job"]
 
 1-terraform-fmt:
-  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
@@ -71,7 +69,6 @@ aws-auth:
   needs: ["vault-job", "0-terraform-init" ]
 
 2-terraform-validate:
-  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
@@ -84,7 +81,6 @@ aws-auth:
   needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
 
 3-terraform-plan:
-  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
@@ -97,7 +93,6 @@ aws-auth:
   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
 
 4-terraform-apply:
-  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
@@ -110,7 +105,6 @@ aws-auth:
   needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
 
 5-terraform-destroy:
-  image: ${IMAGE}
   tags:
       - gitlab-shared-runner
   stage: terraform
