@@ -67,8 +67,8 @@ aws-auth:
     - .tf-config
     - .1-terraform-fmt
     - .rules-config
-  dependencies: ["vault-job","terraform-init"]
-  needs: ["vault-job", "terraform-init" ]
+  dependencies: ["vault-job","0-terraform-init"]
+  needs: ["vault-job", "0-terraform-init" ]
 
 2-terraform-validate:
   image: ${IMAGE}
@@ -80,8 +80,8 @@ aws-auth:
     - .tf-config
     - .2-terraform-validate
     - .rules-config
-  dependencies: ["vault-job","terraform-init","terraform-fmt"]
-  needs: ["vault-job","terraform-init","terraform-fmt" ]
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt"]
+  needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
 
 3-terraform-plan:
   image: ${IMAGE}
@@ -93,8 +93,8 @@ aws-auth:
     - .tf-config
     - .3-terraform-plan
     - .rules-config
-  dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate"]
-  needs: ["vault-job", "terraform-init", "terraform-fmt", "terraform-validate" ]
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
+  needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
 
 4-terraform-apply:
   image: ${IMAGE}
@@ -106,8 +106,8 @@ aws-auth:
     - .tf-config
     - .4-terraform-apply
     - .rules-config
-  dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
-  needs: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
+  needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
 
 5-terraform-destroy:
   image: ${IMAGE}
@@ -119,8 +119,8 @@ aws-auth:
     - .tf-config
     - .5-terraform-destroy
     - .rules-config
-  dependencies: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
-  needs: ["vault-job","terraform-init","terraform-fmt","terraform-validate","terraform-plan" ]
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
+  needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
 
 
   
