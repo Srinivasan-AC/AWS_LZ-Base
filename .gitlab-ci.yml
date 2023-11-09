@@ -53,7 +53,7 @@ init:
   before_script:
     - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
   script:
-    - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
+    - terraform -chdir=${TERRAFORM_DIR_APP} init -backend-config="../../environments/${ENV}/terraform.backendconfig"
 
 
 0-terraform-init:
