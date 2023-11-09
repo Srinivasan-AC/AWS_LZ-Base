@@ -1,3 +1,4 @@
+# terraform pipeline
 variables:
   VAULT_AUTH_ROLE: 'myproject-staging'
   AWS_DEFAULT_REGION : 'us-east-1'
