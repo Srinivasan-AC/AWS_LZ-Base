@@ -23,6 +23,7 @@ include:
 stages:
     - authenticate
     - awscli
+    #- terraform-init
     - terraform
 
 vault-job:
@@ -44,15 +45,21 @@ aws-auth:
     dependencies: ["vault-job"]
     needs: ["vault-job"]
 
+# init: 
+#   image: ${IMAGE}
+#   tags:
+#       - gitlab-shared-runner
+#   script:
+#     - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
+
+
 0-terraform-init:
   tags:
       - gitlab-shared-runner
   stage: terraform
-  when: always
   extends:
     - .tf-config
     - .0-terraform-init
-    - .rules-config
   dependencies: ["vault-job"]
   needs: ["vault-job"]
 
@@ -60,11 +67,9 @@ aws-auth:
   tags:
       - gitlab-shared-runner
   stage: terraform
-  when: always
   extends:
     - .tf-config
     - .1-terraform-fmt
-    - .rules-config
   dependencies: ["vault-job","0-terraform-init"]
   needs: ["vault-job", "0-terraform-init" ]
 
@@ -72,11 +77,9 @@ aws-auth:
   tags:
       - gitlab-shared-runner
   stage: terraform
-  when: always
   extends:
     - .tf-config
     - .2-terraform-validate
-    - .rules-config
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt"]
   needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
 
@@ -84,11 +87,9 @@ aws-auth:
   tags:
       - gitlab-shared-runner
   stage: terraform
-  when: always
   extends:
     - .tf-config
     - .3-terraform-plan
-    - .rules-config
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
 
@@ -96,7 +97,6 @@ aws-auth:
   tags:
       - gitlab-shared-runner
   stage: terraform
-  when: manual
   extends:
     - .tf-config
     - .4-terraform-apply
@@ -108,7 +108,6 @@ aws-auth:
   tags:
       - gitlab-shared-runner
   stage: terraform
-  when: manual
   extends:
     - .tf-config
     - .5-terraform-destroy
