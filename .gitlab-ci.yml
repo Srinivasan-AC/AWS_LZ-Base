@@ -97,6 +97,7 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform
   extends:
+    - .0-terraform-init
     - .3-terraform-plan
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
