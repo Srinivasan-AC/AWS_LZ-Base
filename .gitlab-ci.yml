@@ -23,8 +23,8 @@ include:
 stages:
     - authenticate
     - awscli
-    - terraform-init
-   # - terraform
+    #- terraform-init
+    - terraform
 
 vault-job:
     image: hashicorp/vault:latest
@@ -45,81 +45,81 @@ aws-auth:
     dependencies: ["vault-job"]
     needs: ["vault-job"]
 
-init: 
-  tags:
-    - gitlab-shared-runner
-  image: 
-    name: hashicorp/terraform:latest
-    entrypoint: [""]
-  stage: terraform-init
+# init: 
+#   tags:
+#     - gitlab-shared-runner
+#   image: 
+#     name: hashicorp/terraform:latest
+#     entrypoint: [""]
+#   stage: terraform-init
   
-  #before_script:
-  #  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
-  script:
-    - echo "terraform init running on ${TERRAFORM_DIR_APP} directory and ${ENV} as environment"
-    - pwd
-    - cd /usr/local/bin/
-    - ls
-    - terraform --version
-    - terraform -chdir=${TERRAFORM_DIR_APP} init -backend-config="../../environments/${ENV}/terraform.backendconfig"
+#   #before_script:
+#   #  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
+#   script:
+#     - echo "terraform init running on ${TERRAFORM_DIR_APP} directory and ${ENV} as environment"
+#     - pwd
+#     - cd /usr/local/bin/
+#     - ls
+#     - terraform --version
+#     - terraform -chdir=${TERRAFORM_DIR_APP} init -backend-config="../../environments/${ENV}/terraform.backendconfig"
 
 
-# 0-terraform-init:
-#   tags:
-#       - gitlab-shared-runner
-#   stage: terraform
-#   image: ${IMAGE}
-#   extends:
-#     - .0-terraform-init
-#   dependencies: ["vault-job"]
-#   needs: ["vault-job"]
+0-terraform-init:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  image: ${IMAGE}
+  extends:
+    - .0-terraform-init
+  dependencies: ["vault-job"]
+  needs: ["vault-job"]
 
-# 1-terraform-fmt:
-#   tags:
-#       - gitlab-shared-runner
-#   stage: terraform
-#   extends:
-#     - .1-terraform-fmt
-#   dependencies: ["vault-job","0-terraform-init"]
-#   needs: ["vault-job", "0-terraform-init" ]
+1-terraform-fmt:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .1-terraform-fmt
+  dependencies: ["vault-job","0-terraform-init"]
+  needs: ["vault-job", "0-terraform-init" ]
 
-# 2-terraform-validate:
-#   tags:
-#       - gitlab-shared-runner
-#   stage: terraform
-#   extends:
-#     - .2-terraform-validate
-#   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt"]
-#   needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
+2-terraform-validate:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .2-terraform-validate
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt"]
+  needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
 
-# 3-terraform-plan:
-#   tags:
-#       - gitlab-shared-runner
-#   stage: terraform
-#   extends:
-#     - .3-terraform-plan
-#   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
-#   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
+3-terraform-plan:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .3-terraform-plan
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
+  needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
 
-# 4-terraform-apply:
-#   tags:
-#       - gitlab-shared-runner
-#   stage: terraform
-#   extends:
-#     - .4-terraform-apply
-#     - .rules-config
-#   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
-#   needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
+4-terraform-apply:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .4-terraform-apply
+    - .rules-config
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
+  needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
 
-# 5-terraform-destroy:
-#   tags:
-#       - gitlab-shared-runner
-#   stage: terraform
-#   extends:
-#     - .5-terraform-destroy
-#     - .rules-config
-#   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
-#   needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
+5-terraform-destroy:
+  tags:
+      - gitlab-shared-runner
+  stage: terraform
+  extends:
+    - .5-terraform-destroy
+    - .rules-config
+  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
+  needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
 
 
   
