@@ -25,6 +25,9 @@ stages:
     - awscli
     #- terraform-init
     - terraform
+    - terraform-plan
+    - terraform-apply
+    - terraform-destroy
 
 vault-job:
     image: hashicorp/vault:latest
@@ -95,19 +98,19 @@ aws-auth:
 3-terraform-plan:
   tags:
       - gitlab-shared-runner
-  stage: terraform
+  stage: terraform-plan
   extends:
-    - .0-terraform-init
+   # - .0-terraform-init
     - .3-terraform-plan
-  before_script:
-    - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
+  # before_script:
+  #   - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
 
 4-terraform-apply:
   tags:
       - gitlab-shared-runner
-  stage: terraform
+  stage: terraform-apply
   extends:
     - .4-terraform-apply
     - .rules-config
@@ -117,7 +120,7 @@ aws-auth:
 5-terraform-destroy:
   tags:
       - gitlab-shared-runner
-  stage: terraform
+  stage: terraform-destroy
   extends:
     - .5-terraform-destroy
     - .rules-config
