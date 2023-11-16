@@ -54,6 +54,9 @@ init:
   #  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
   script:
     - echo "terraform init running on ${TERRAFORM_DIR_APP} directory and ${ENV} as environment"
+    - pwd
+    - cd /usr/bin
+    - ls
     - terraform --version
     - terraform -chdir=${TERRAFORM_DIR_APP} init -backend-config="../../environments/${ENV}/terraform.backendconfig"
 
