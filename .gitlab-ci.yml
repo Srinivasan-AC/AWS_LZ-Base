@@ -46,7 +46,9 @@ aws-auth:
     needs: ["vault-job"]
 
 init: 
-  image: hashicorp/terraform:1.6.3
+  image: 
+    name: hashicorp/terraform:latest
+    entrypoint: [""]
   stage: terraform-init
   tags:
       - gitlab-shared-runner
