@@ -12,6 +12,7 @@ app_vpc_a_public_subnet_names                  = ["app_vpc_a_public_subnet1", "a
 app_vpc_a_database_subnet_names                = ["app_vpc_a_database_subnet1", "app_vpc_a_database_subnet2"]
 create_database_subnet_group                   = true
 app_vpc_a_create_igw                           = true
+app_vpc_a_tgw_not_required                     = false
 app_vpc_a_enable_nat_gateway                   = false
 app_vpc_a_single_nat_gateway                   = false
 app_vpc_a_enable_dns_hostnames                 = true

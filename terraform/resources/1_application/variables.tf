@@ -84,6 +84,12 @@ variable "app_vpc_a_create_igw" {
   default     = false
 }
 
+variable "app_vpc_a_tgw_not_required" {
+  description = "Should be false when TGW is required"
+  type        = bool
+  default     = false
+}
+
 variable "app_vpc_a_enable_nat_gateway" {
   description = "Should be true if you want to provision NAT Gateways for each of your private networks"
   type        = bool

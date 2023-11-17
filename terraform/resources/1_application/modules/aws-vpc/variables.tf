@@ -50,6 +50,12 @@ variable "enable_dns_support" {
   default     = true
 }
 
+variable "tgw_not_required" {
+  description = "Should be true to enable DNS support in the VPC"
+  type        = bool
+  default     = true
+}
+
 variable "enable_network_address_usage_metrics" {
   description = "Determines whether network address usage metrics are enabled for the VPC"
   type        = bool

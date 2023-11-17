@@ -27,6 +27,8 @@ module "app_vpc_a" {
   # IGW
   create_igw = var.app_vpc_a_create_igw
 
+  tgw_not_required = var.app_vpc_a_tgw_not_required
+
   # NAT Gateway
   enable_nat_gateway = var.app_vpc_a_enable_nat_gateway
   single_nat_gateway = var.app_vpc_a_single_nat_gateway
