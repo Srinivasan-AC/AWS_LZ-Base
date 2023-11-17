@@ -23,7 +23,6 @@ include:
 stages:
     - authenticate
     - awscli
-    #- terraform-init
     - terraform
     - terraform-plan
     - terraform-apply
@@ -43,35 +42,21 @@ aws-auth:
       - gitlab-shared-runner
     stage: awscli
     image: amazon/aws-cli:latest
+    when: delayed
+    start_in: 20 seconds
     extends:
         - .aws-cli
     dependencies: ["vault-job"]
-    needs: ["vault-job"]
-
-# init: 
-#   tags:
-#     - gitlab-shared-runner
-#   image: 
-#     name: hashicorp/terraform:latest
-#     entrypoint: [""]
-#   stage: terraform-init
-  
-#   #before_script:
-#   #  - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tmmcops.com".insteadOf "https://gitlab.tmmcops.com"
-#   script:
-#     - echo "terraform init running on ${TERRAFORM_DIR_APP} directory and ${ENV} as environment"
-#     - pwd
-#     - cd /usr/local/bin/
-#     - ls
-#     - terraform --version
-#     - terraform -chdir=${TERRAFORM_DIR_APP} init -backend-config="../../environments/${ENV}/terraform.backendconfig"
-
+    needs: ["vault-job"
+    ]
 
 0-terraform-init:
   tags:
       - gitlab-shared-runner
   stage: terraform
   image: ${IMAGE}
+  when: delayed
+  start_in: 20 seconds
   extends:
     - .0-terraform-init
   dependencies: ["vault-job"]
@@ -100,10 +85,7 @@ aws-auth:
       - gitlab-shared-runner
   stage: terraform-plan
   extends:
-   # - .0-terraform-init
     - .3-terraform-plan
-  # before_script:
-  #   - terraform -chdir=${TERRAFORM_DIR_APP} init -reconfigure -upgrade -backend-config="../../environments/${ENV}/terraform.backendconfig"
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
   needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
 
