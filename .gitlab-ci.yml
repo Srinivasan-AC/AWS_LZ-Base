@@ -5,6 +5,7 @@ variables:
   VAULT_ADDR: 'http://3.226.190.247:8200'
   IMAGE: "hashicorp/terraform:1.6.3"
   TERRAFORM_DIR_APP: "terraform/resources/1_application"
+  TERRAFORM_DESTROY: "true"
   ENV: "dev"
 
 include:
