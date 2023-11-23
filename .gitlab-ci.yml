@@ -1,114 +1,164 @@
-# terraform pipeline to deploy aws-landing-zone-phase1
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 variables:
-  VAULT_AUTH_ROLE: 'myproject-staging'
-  AWS_DEFAULT_REGION : 'us-east-1'
-  VAULT_ADDR: 'http://3.226.190.247:8200'
-  IMAGE: "hashicorp/terraform:1.6.3"
-  TERRAFORM_DIR_APP: "terraform/resources/1_application"
-  TERRAFORM_DESTROY: "true"
-  ENV: "dev"
-
+  VAULT_AUTH_ROLE: myproject-staging
+  AWS_DEFAULT_REGION: us-east-1
+  VAULT_ADDR: http://3.226.190.247:8200
+  IMAGE: hashicorp/terraform:1.6.3
+  TERRAFORM_DIR_APP: terraform/resources/1_application
+  TERRAFORM_DESTROY: 'true'
+  ENV: dev
 include:
-  - project: 'aqt/vault-authentication'
-    file:
-      - 'templates/vault-aws-auth.yml'
-  - project: 'aqt/vault-authentication'
-    file:
-      - 'templates/terraform.yml'
-
-.rules-config:
+- project: aqt/vault-authentication
+  file:
+  - templates/vault-aws-auth.yml
+- project: aqt/vault-authentication
+  file:
+  - templates/terraform.yml
+- template: Auto-DevOps.gitlab-ci.yml
+".rules-config":
   rules:
-    - if: $CI_COMMIT_BRANCH == 'main'
-      when: manual
-
+  - if: "$CI_COMMIT_BRANCH == 'main'"
+    when: manual
 stages:
-    - authenticate
-    - awscli
-    - terraform
-    - terraform-plan
-    - terraform-apply
-    - terraform-destroy
-
+- authenticate
+- awscli
+- terraform
+- terraform-plan
+- terraform-apply
+- terraform-destroy
+- build
+- test
+- deploy
+- review
+- dast
+- staging
+- canary
+- production
+- incremental rollout 10%
+- incremental rollout 25%
+- incremental rollout 50%
+- incremental rollout 100%
+- performance
+- cleanup
 vault-job:
-    image: hashicorp/vault:latest
-    tags:
-      - gitlab-shared-runner
-    stage: authenticate
-    extends: 
-      - .vault-aws-auth
-      - .rules-config
-
-aws-auth:
-    tags:
-      - gitlab-shared-runner
-    stage: awscli
-    image: amazon/aws-cli:latest
-    when: delayed
-    start_in: 20 seconds
-    extends:
-        - .aws-cli
-    dependencies: ["vault-job"]
-    needs: ["vault-job"
-    ]
-
-0-terraform-init:
+  image: hashicorp/vault:latest
   tags:
-      - gitlab-shared-runner
-  stage: terraform
-  image: ${IMAGE}
+  - gitlab-shared-runner
+  stage: authenticate
+  extends:
+  - ".vault-aws-auth"
+  - ".rules-config"
+aws-auth:
+  tags:
+  - gitlab-shared-runner
+  stage: awscli
+  image: amazon/aws-cli:latest
   when: delayed
   start_in: 20 seconds
   extends:
-    - .0-terraform-init
-  dependencies: ["vault-job"]
-  needs: ["vault-job"]
-
+  - ".aws-cli"
+  dependencies:
+  - vault-job
+  needs:
+  - vault-job
+0-terraform-init:
+  tags:
+  - gitlab-shared-runner
+  stage: terraform
+  image: "${IMAGE}"
+  when: delayed
+  start_in: 20 seconds
+  extends:
+  - ".0-terraform-init"
+  dependencies:
+  - vault-job
+  needs:
+  - vault-job
 1-terraform-fmt:
   tags:
-      - gitlab-shared-runner
+  - gitlab-shared-runner
   stage: terraform
   extends:
-    - .1-terraform-fmt
-  dependencies: ["vault-job","0-terraform-init"]
-  needs: ["vault-job", "0-terraform-init" ]
-
+  - ".1-terraform-fmt"
+  dependencies:
+  - vault-job
+  - 0-terraform-init
+  needs:
+  - vault-job
+  - 0-terraform-init
 2-terraform-validate:
   tags:
-      - gitlab-shared-runner
+  - gitlab-shared-runner
   stage: terraform
   extends:
-    - .2-terraform-validate
-  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt"]
-  needs: ["vault-job","0-terraform-init","1-terraform-fmt" ]
-
+  - ".2-terraform-validate"
+  dependencies:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  needs:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
 3-terraform-plan:
   tags:
-      - gitlab-shared-runner
+  - gitlab-shared-runner
   stage: terraform-plan
   extends:
-    - .3-terraform-plan
-  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate"]
-  needs: ["vault-job", "0-terraform-init", "1-terraform-fmt", "2-terraform-validate" ]
-
+  - ".3-terraform-plan"
+  dependencies:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  - 2-terraform-validate
+  needs:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  - 2-terraform-validate
 4-terraform-apply:
   tags:
-      - gitlab-shared-runner
+  - gitlab-shared-runner
   stage: terraform-apply
   extends:
-    - .4-terraform-apply
-    - .rules-config
-  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
-  needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
-
+  - ".4-terraform-apply"
+  - ".rules-config"
+  dependencies:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  - 2-terraform-validate
+  - 3-terraform-plan
+  needs:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  - 2-terraform-validate
+  - 3-terraform-plan
 5-terraform-destroy:
   tags:
-      - gitlab-shared-runner
+  - gitlab-shared-runner
   stage: terraform-destroy
   extends:
-    - .5-terraform-destroy
-    - .rules-config
-  dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
-  needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
-
-
-  
+  - ".5-terraform-destroy"
+  - ".rules-config"
+  dependencies:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  - 2-terraform-validate
+  - 3-terraform-plan
+  needs:
+  - vault-job
+  - 0-terraform-init
+  - 1-terraform-fmt
+  - 2-terraform-validate
+  - 3-terraform-plan
+sast:
+  stage: test
