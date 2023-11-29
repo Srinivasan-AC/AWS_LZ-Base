@@ -3,13 +3,15 @@
 #######################################################################################################################
 app_vpc_a_name                                 = "app_vpc_a"
 app_vpc_a_cidr                                 = "10.0.0.0/16"
-app_vpc_a_azs                                  = ["us-east-1a", "us-east-1b"]
-app_vpc_a_private_subnets                      = ["10.0.1.0/24", "10.0.2.0/24"]
-app_vpc_a_public_subnets                       = ["10.0.101.0/24", "10.0.102.0/24"]
-app_vpc_a_database_subnets                     = ["10.0.201.0/24", "10.0.202.0/24"]
-app_vpc_a_private_subnet_names                 = ["app_vpc_a_private_subnet1", "app_vpc_a_private_subnet2"]
-app_vpc_a_public_subnet_names                  = ["app_vpc_a_public_subnet1", "app_vpc_a_Public_subnet2"]
-app_vpc_a_database_subnet_names                = ["app_vpc_a_database_subnet1", "app_vpc_a_database_subnet2"]
+app_vpc_a_azs                                  = ["us-east-1a", "us-east-1b", "us-east-1c"]
+app_vpc_a_private_subnets                      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+app_vpc_a_public_subnets                       = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+app_vpc_a_database_subnets                     = ["10.0.201.0/24", "10.0.202.0/24", "10.0.203.0/24"]
+app_vpc_a_intra_subnets                        = ["10.0.301.0/24", "10.0.302.0/24", "10.0.303.0/24"]
+app_vpc_a_private_subnet_names                 = ["app_vpc_a_private_subnet1", "app_vpc_a_private_subnet2","app_vpc_a_private_subnet3"]
+app_vpc_a_public_subnet_names                  = ["app_vpc_a_public_subnet1", "app_vpc_a_Public_subnet2", "app_vpc_a_Public_subnet3"]
+app_vpc_a_database_subnet_names                = ["app_vpc_a_database_subnet1", "app_vpc_a_database_subnet2", "app_vpc_a_database_subnet3"]
+app_vpc_a_intra_subnet_names                   = ["app_vpc_a_intra_subnet1", "app_vpc_a_intra_subnet2", "app_vpc_a_intra_subnet3"]
 create_database_subnet_group                   = true
 app_vpc_a_create_igw                           = true
 app_vpc_a_tgw_not_required                     = false
@@ -78,18 +80,25 @@ app_vpc_a_tags = {
 app_vpc_a_vpc_tags = {
   Name = "app_vpc_a"
 }
-# app_vpc_a_private_subnet_tags = {
+app_vpc_a_private_subnet_tags = {
 
-#   Name = "app-vpc-a-tgw-private-subnet"
-# }
-# app_vpc_a_public_subnet_tags = {
+  ID = "app-vpc-a-tgw-private-subnet",
+  "kubernetes.io/role/internal-elb" = 1
+  
+}
+app_vpc_a_public_subnet_tags = {
 
-#   Name = "app-vpc-a-workload-subnet"
-# }
+  ID = "app-vpc-a-workload-subnet",
+  "kubernetes.io/role/elb" = 1
+}
 
-# app_vpc_a_database_subnet_subnet_tags = {
-#   Name = "app-vpc-a-database-subnet"
-# }
+app_vpc_a_database_subnet_subnet_tags = {
+  ID = "app-vpc-a-database-subnet"
+}
+
+app_vpc_a_intra_subnet_subnet_tags = {
+  ID = "app-vpc-a-intra-subnet"
+}
 
 ########################################################################################################################
 # Application VPC B 

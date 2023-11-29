@@ -54,6 +54,12 @@ variable "app_vpc_a_database_subnets" {
   default     = []
 }
 
+variable "app_vpc_a_intra_subnets" {
+  description = "Specify list of intra subnets"
+  type        = list(string)
+  default     = []
+}
+
 variable "app_vpc_a_private_subnet_names" {
   description = "Specify list of private subnets names"
   type        = list(string)
@@ -68,6 +74,12 @@ variable "app_vpc_a_public_subnet_names" {
 
 variable "app_vpc_a_database_subnet_names" {
   description = "Specify list of public subnets names"
+  type        = list(string)
+  default     = []
+}
+
+variable "app_vpc_a_intra_subnet_names" {
+  description = "Specify list of intra subnets names"
   type        = list(string)
   default     = []
 }
@@ -265,6 +277,13 @@ variable "app_vpc_a_database_subnet_subnet_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "app_vpc_a_intra_subnet_subnet_tags" {
+  description = "Tags for the public subnet"
+  type        = map(string)
+  default     = {}
+}
+
 
 #----------------------------------------------------------------------------------------------------------------------
 # app_vpc_b

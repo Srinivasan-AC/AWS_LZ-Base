@@ -17,10 +17,12 @@ module "app_vpc_a" {
   private_subnets  = var.app_vpc_a_private_subnets
   public_subnets   = var.app_vpc_a_public_subnets
   database_subnets = var.app_vpc_a_database_subnets
+  intra_subnets = var.app_vpc_a_intra_subnets
 
   private_subnet_names  = var.app_vpc_a_private_subnet_names
   public_subnet_names   = var.app_vpc_a_public_subnet_names
   database_subnet_names = var.app_vpc_a_database_subnet_names
+  intra_subnet_names = var.app_vpc_a_intra_subnet_names
 
   create_database_subnet_group = var.create_database_subnet_group
 
@@ -65,6 +67,7 @@ module "app_vpc_a" {
   private_subnet_tags  = var.app_vpc_a_private_subnet_tags
   public_subnet_tags   = var.app_vpc_a_public_subnet_tags
   database_subnet_tags = var.app_vpc_a_database_subnet_subnet_tags
+  intra_subnet_tags    = var.app_vpc_a_intra_subnet_subnet_tags
 
 }
 
