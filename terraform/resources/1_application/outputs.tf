@@ -71,6 +71,10 @@ output "app_vpc_a_database_subnets_cidr_blocks" {
   value       = module.app_vpc_a.database_subnets_cidr_blocks
 }
 
+output "dhcp_options_id" {
+  description = "The ID of the DHCP options"
+  value       = module.app_vpc_a.dhcp_options_id
+}
 ################################################################################
 # VPC Module Application VPC b
 ################################################################################
