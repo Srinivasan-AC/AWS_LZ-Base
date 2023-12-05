@@ -2,12 +2,12 @@
 # Application VPC A
 #######################################################################################################################
 app_vpc_a_name                                 = "app_vpc_a"
-app_vpc_a_cidr                                 = "10.10.0.0/16"
+app_vpc_a_cidr                                 = "10.20.0.0/16"
 app_vpc_a_azs                                  = ["us-east-1a", "us-east-1b", "us-east-1c"]
-app_vpc_a_private_subnets                      = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
-app_vpc_a_public_subnets                       = ["10.10.11.0/24", "10.10.12.0/24", "10.10.13.0/24"]
-app_vpc_a_database_subnets                     = ["10.10.21.0/24", "10.10.22.0/24", "10.10.23.0/24"]
-app_vpc_a_intra_subnets                        = ["10.10.31.0/24", "10.10.32.0/24", "10.10.33.0/24"]
+app_vpc_a_private_subnets                      = ["10.20.1.0/24", "10.20.2.0/24", "10.20.3.0/24"]
+app_vpc_a_public_subnets                       = ["10.20.11.0/24", "10.20.12.0/24", "10.20.13.0/24"]
+app_vpc_a_database_subnets                     = ["10.20.21.0/24", "10.20.22.0/24", "10.20.23.0/24"]
+app_vpc_a_intra_subnets                        = ["10.20.31.0/24", "10.20.32.0/24", "10.20.33.0/24"]
 app_vpc_a_private_subnet_names                 = ["app_vpc_a_private_subnet1", "app_vpc_a_private_subnet2","app_vpc_a_private_subnet3"]
 app_vpc_a_public_subnet_names                  = ["app_vpc_a_public_subnet1", "app_vpc_a_Public_subnet2", "app_vpc_a_Public_subnet3"]
 app_vpc_a_database_subnet_names                = ["app_vpc_a_database_subnet1", "app_vpc_a_database_subnet2", "app_vpc_a_database_subnet3"]
