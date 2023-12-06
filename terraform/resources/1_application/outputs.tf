@@ -346,12 +346,12 @@ output "firewall_policy_resource_policy_id" {
 # AWS GuardDuty outputs
 ######################################################################################################################
 
-# output "guardduty_detector" {
-#   value = module.guardduty.guardduty_detector
-# }
-# output "sns_topic" {
-#   value = module.guardduty.sns_topic
-# }
+output "guardduty_detector" {
+  value = module.guardduty.guardduty_detector
+}
+output "sns_topic" {
+  value = module.guardduty.sns_topic
+}
 
 #######################################################################################
 # Cloudtrail Outputs
@@ -426,22 +426,22 @@ output "sns_topic_securityhub" {
 #####################################################################################################################
 # AWS Config Outputs
 #####################################################################################################################
-# output "rules_applied" {
-#   description = "A list of Config Rules applied by the module"
-#   value       = keys(module.managed_rules.rules[0])
-# }
+output "rules_applied" {
+  description = "A list of Config Rules applied by the module"
+  value       = keys(module.managed_rules.rules[0])
+}
 
-# output "bucket_id" {
-#   value       = module.config_logs.bucket_id
-#   description = "Bucket ID"
-# }
+output "bucket_id" {
+  value       = module.config_logs.bucket_id
+  description = "Bucket ID"
+}
 
-# output "bucket_arn" {
-#   value       = module.config_logs.bucket_arn
-#   description = "Bucket ARN"
-# }
+output "bucket_arn" {
+  value       = module.config_logs.bucket_arn
+  description = "Bucket ARN"
+}
 
-# output "bucket_domain_name" {
-#   value       = module.config_logs.bucket_domain_name
-#   description = "FQDN of bucket"
-# }
+output "bucket_domain_name" {
+  value       = module.config_logs.bucket_domain_name
+  description = "FQDN of bucket"
+}
