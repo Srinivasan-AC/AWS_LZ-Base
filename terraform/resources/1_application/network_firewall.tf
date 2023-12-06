@@ -58,7 +58,7 @@ module "network_firewall" {
   policy_name        = var.policy_name
   policy_stateful_rule_group_reference = {
     one = { resource_arn = module.block_domains_fw_rule_group.arn }
-    two = { resource_arn = module.et_open_rulselt_fw_rule_group.arn }
+    #two = { resource_arn = module.et_open_rulselt_fw_rule_group.arn }
   }
   # var.policy_stateful_rule_group_reference >> use this variable if need to provide ARN which is alreday created.
   # above variable can be used to add aws managed stateful rule groups as well.
