@@ -119,40 +119,40 @@ module "block_domains_fw_rule_group" {
 }
 
 #--------------------------------------------------------------------------
-#  Emerging Threat Rule Group
+#  Emerging Threat Rule Group  # commented to tshoot
 #--------------------------------------------------------------------------
-module "et_open_rulselt_fw_rule_group" {
-  source = "./modules/aws-network-firewall/modules/rule-group"
+# module "et_open_rulselt_fw_rule_group" {
+#   source = "./modules/aws-network-firewall/modules/rule-group"
 
-  name                       = "et-open-rulselt-fw-rule-group"
-  description                = var.rulegroup_description_stateful_open_rulselt
-  type                       = "STATEFUL"
-  capacity                   = var.rulegroup_capacity_stateful_open_rulselt #capacity calculation required
-  rules                      = file("./rules/emerging-user-agents.rules")
-  create_resource_policy     = var.create_rulegroup_resource_policy_stateful_open_rulselt
-  attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_open_rulselt
-  resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_open_rulselt
+#   name                       = "et-open-rulselt-fw-rule-group"
+#   description                = var.rulegroup_description_stateful_open_rulselt
+#   type                       = "STATEFUL"
+#   capacity                   = var.rulegroup_capacity_stateful_open_rulselt #capacity calculation required
+#   rules                      = file("./rules/emerging-user-agents.rules")
+#   create_resource_policy     = var.create_rulegroup_resource_policy_stateful_open_rulselt
+#   attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_open_rulselt
+#   resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_open_rulselt
 
-  tags = merge(local.tags, var.rulegroup_tags)
-}
+#   tags = merge(local.tags, var.rulegroup_tags)
+# }
 
 #--------------------------------------------------------------------------
-#  Blog Public DNS Resolvers  Rule Group
+#  Block Public DNS Resolvers  Rule Group
 #--------------------------------------------------------------------------
-module "block_public_dns_resolvers" {
-  source = "./modules/aws-network-firewall/modules/rule-group"
+# module "block_public_dns_resolvers" {
+#   source = "./modules/aws-network-firewall/modules/rule-group"
 
-  name                       = "block-public-dns"
-  description                = var.rulegroup_description_stateful_dns_resolvers
-  type                       = "STATEFUL"
-  capacity                   = var.rulegroup_capacity_stateful_dns_resolvers #capacity calculation required
-  rule_group                 = var.rule_group_stateful_dns_resolvers
-  create_resource_policy     = var.create_rulegroup_resource_policy_stateful_dns_resolvers
-  attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_dns_resolvers
-  resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_dns_resolvers
+#   name                       = "block-public-dns"
+#   description                = var.rulegroup_description_stateful_dns_resolvers
+#   type                       = "STATEFUL"
+#   capacity                   = var.rulegroup_capacity_stateful_dns_resolvers #capacity calculation required
+#   rule_group                 = var.rule_group_stateful_dns_resolvers
+#   create_resource_policy     = var.create_rulegroup_resource_policy_stateful_dns_resolvers
+#   attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_dns_resolvers
+#   resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_dns_resolvers
 
-  tags = merge(local.tags, var.rulegroup_tags)
-}
+#   tags = merge(local.tags, var.rulegroup_tags)
+# }
 
 
 resource "aws_cloudwatch_log_group" "logs" {
