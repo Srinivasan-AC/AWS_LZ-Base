@@ -30,7 +30,7 @@ module "app_vpc_a" {
   create_igw = var.app_vpc_a_create_igw
 
   # TGW required or not
-  tgw_not_required = var.app_vpc_a_tgw_not_required
+  #tgw_not_required = var.app_vpc_a_tgw_not_required
 
   # NAT Gateway
   enable_nat_gateway = var.app_vpc_a_enable_nat_gateway
@@ -72,17 +72,17 @@ module "app_vpc_a" {
 
 }
 
-resource "aws_route" "app_vpc_a_tgw_route" {
-  count                  = length(module.app_vpc_a.public_route_table_ids)
-  route_table_id         = module.app_vpc_a.public_route_table_ids[count.index]
-  destination_cidr_block = "0.0.0.0/0"
-  transit_gateway_id     = module.tgw.ec2_transit_gateway_id
+# resource "aws_route" "app_vpc_a_tgw_route" {
+#   count                  = length(module.app_vpc_a.public_route_table_ids)
+#   route_table_id         = module.app_vpc_a.public_route_table_ids[count.index]
+#   destination_cidr_block = "0.0.0.0/0"
+#   transit_gateway_id     = module.tgw.ec2_transit_gateway_id
 
-  depends_on = [
-    module.tgw,
-    module.app_vpc_a,
-  ]
-}
+#   depends_on = [
+#     module.tgw,
+#     module.app_vpc_a,
+#   ]
+# }
 
 # resource "aws_route" "app_vpc_a_tgw_route_private" {
 #   count                  = length(module.app_vpc_a.private_route_table_ids)
