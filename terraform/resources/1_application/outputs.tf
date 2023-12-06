@@ -414,14 +414,14 @@ output "aws_cloudwatch_event_target" {
 ################################################################################
 # AWS Security Hub Outputs
 ##################################################################################
-# output "enabled_subscriptions" {
-#   description = "Enabled subscriptions"
-#   value       = module.security_hub.enabled_subscriptions
-# }
+output "enabled_subscriptions" {
+  description = "Enabled subscriptions"
+  value       = module.security_hub.enabled_subscriptions
+}
 
-# output "sns_topic_securityhub" {
-#   value = module.security_hub.sns_topic
-# }
+output "sns_topic_securityhub" {
+  value = module.security_hub.sns_topic
+}
 
 #####################################################################################################################
 # AWS Config Outputs
