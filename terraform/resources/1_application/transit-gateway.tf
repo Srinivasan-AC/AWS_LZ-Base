@@ -14,18 +14,18 @@ module "tgw" {
   enable_multicast_support = var.enable_multicast_support
 
   vpc_attachments = {
-    # app_vpc_a = {
-    #   vpc_id                                          = module.app_vpc_a.vpc_id
-    #   subnet_ids                                      = module.app_vpc_a.private_subnets
-    #   dns_support                                     = var.enable_dns_support
-    #   ipv6_support                                    = false
-    #   transit_gateway_default_route_table_association = false
-    #   transit_gateway_default_route_table_propagation = true
-    #   transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.app_rt_table.id
-    #   tags = {
-    #     Name = "${var.transit_gateway_name}-app-vpc-a"
-    #   }
-    # },
+    app_vpc_a = {
+      vpc_id                                          = module.app_vpc_a.vpc_id
+      subnet_ids                                      = module.app_vpc_a.private_subnets
+      dns_support                                     = var.enable_dns_support
+      ipv6_support                                    = false
+      transit_gateway_default_route_table_association = false
+      transit_gateway_default_route_table_propagation = true
+      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.app_rt_table.id
+      tags = {
+        Name = "${var.transit_gateway_name}-app-vpc-a"
+      }
+    },
     # app_vpc_b = {
     #   vpc_id                                          = module.app_vpc_b.vpc_id
     #   subnet_ids                                      = module.app_vpc_b.private_subnets
@@ -115,12 +115,12 @@ resource "aws_ec2_transit_gateway_route" "mgmt_vpc_attachment" {
 
 }
 
-# resource "aws_ec2_transit_gateway_route" "app_vpc_a_tgw_route" {
-#   transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["app_vpc_a"]["id"]
-#   destination_cidr_block         = module.app_vpc_a.vpc_cidr_block
-#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+resource "aws_ec2_transit_gateway_route" "app_vpc_a_tgw_route" {
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["app_vpc_a"]["id"]
+  destination_cidr_block         = module.app_vpc_a.vpc_cidr_block
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
 
-# }
+}
 
 #------------------------------------------------------------------------
 # Spoke  Transit Gateway  Route Table
