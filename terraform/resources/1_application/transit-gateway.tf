@@ -21,7 +21,7 @@ module "tgw" {
       ipv6_support                                    = false
       transit_gateway_default_route_table_association = false
       transit_gateway_default_route_table_propagation = false
-      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.app_rt_table.id
+      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
       tags = {
         Name = "${var.transit_gateway_name}-app-vpc-a"
       }
@@ -45,7 +45,7 @@ module "tgw" {
       transit_gateway_default_route_table_association = true
       transit_gateway_default_route_table_propagation = true
       ipv6_support                                    = false
-      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.inspection_vpc_rt_table.id
       tags = {
         Name = "${var.transit_gateway_name}-inspection-vpc"
       }
