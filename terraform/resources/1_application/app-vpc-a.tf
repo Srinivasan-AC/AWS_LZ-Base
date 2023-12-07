@@ -87,7 +87,7 @@ module "app_vpc_a" {
 # resource "aws_route" "app_vpc_a_tgw_route_private" {
 #   count                  = length(module.app_vpc_a.private_route_table_ids)
 #   route_table_id         = module.app_vpc_a.private_route_table_ids[count.index]
-#   destination_cidr_block = "0.0.0.0/0"
+#   destination_cidr_block = "10.0.0.0/8"
 #   transit_gateway_id     = module.tgw.ec2_transit_gateway_id
 
 #   depends_on = [

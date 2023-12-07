@@ -1315,13 +1315,13 @@ variable "default_vpc_name" {
 variable "default_vpc_enable_dns_support" {
   description = "Should be true to enable DNS support in the Default VPC"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_vpc_enable_dns_hostnames" {
   description = "Should be true to enable DNS hostnames in the Default VPC"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_vpc_tags" {
@@ -1333,7 +1333,7 @@ variable "default_vpc_tags" {
 variable "manage_default_security_group" {
   description = "Should be true to adopt and manage default security group"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_security_group_name" {
@@ -1367,7 +1367,7 @@ variable "default_security_group_tags" {
 variable "manage_default_network_acl" {
   description = "Should be true to adopt and manage Default Network ACL"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_network_acl_name" {
@@ -1435,7 +1435,7 @@ variable "default_network_acl_tags" {
 variable "manage_default_route_table" {
   description = "Should be true to manage default route table"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "default_route_table_name" {
@@ -1576,10 +1576,4 @@ variable "flow_log_cloudwatch_log_group_kms_key_id" {
   description = "The ARN of the KMS Key to use when encrypting log data for VPC flow logs"
   type        = string
   default     = null
-}
-
-variable "putin_khuylo" {
-  description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
-  type        = bool
-  default     = true
 }
