@@ -50,3 +50,12 @@ resource "aws_route" "mgmt_vpc_route_to_tgw" {
   depends_on = [module.tgw]
 
 }
+
+resource "aws_route" "mgmt_vpc_route_to_tgw_private" {
+  route_table_id         = module.mgmt_vpc.private_route_table_ids[0]
+  destination_cidr_block = "10.0.0.0/8"
+  transit_gateway_id     = module.tgw.ec2_transit_gateway_id
+
+  depends_on = [module.tgw]
+
+}

@@ -4,7 +4,7 @@ data "aws_caller_identity" "current" {}
 locals {
   name       = "aqt-${var.network_firewall_name}"
   account_id = data.aws_caller_identity.current.account_id
-  num_azs    = 3
+  num_azs    = 2
   tags = {
     Project_name    = "AQT Seed Team"
     Deployment_name = "AWS_Landing_Zone"
