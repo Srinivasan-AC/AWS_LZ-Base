@@ -1,4 +1,4 @@
-# terraform pipeline to deploy aws-landing-zone-phase1
+# terraform pipeline to deploy aws-landing-zone-phase1..
 variables:
   VAULT_AUTH_ROLE: 'myproject-staging'
   AWS_DEFAULT_REGION : 'us-east-1'
