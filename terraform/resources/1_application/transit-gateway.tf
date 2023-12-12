@@ -81,7 +81,7 @@ module "tgw" {
 }
 
 #------------------------------------------------------------------------
-# Management Transit Gateway  Route Table
+# Inspection Transit Gateway  Route Table
 #------------------------------------------------------------------------
 resource "aws_ec2_transit_gateway_route_table" "inspection_rt_table" {
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
@@ -98,6 +98,8 @@ resource "aws_ec2_transit_gateway_route" "inspection_vpc_route" {
   blackhole                      = false
 
 }
+
+
 #------------------------------------------------------------------------
 # Firewall  Transit Gateway  Route Table
 #------------------------------------------------------------------------
@@ -130,4 +132,23 @@ resource "aws_ec2_transit_gateway_route" "app_vpc_a_tgw_route" {
 
 }
 
+#----------------------------------------------------------------------------------------------------
+# Route table association for firewall route table
+#----------------------------------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route_table_association" "inspection_vpc" {
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["inspection_vpc"]["id"]
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id 
+}
 
+#----------------------------------------------------------------------------------------------------
+# Route table association for Inspection route table
+#----------------------------------------------------------------------------------------------------
+resource "aws_ec2_transit_gateway_route_table_association" "app_vpc_a" {
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["app_vpc_a"]["id"]
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt_table.id
+}
+
+resource "aws_ec2_transit_gateway_route_table_association" "egress_vpc" {
+  transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["mgmt_vpc"]["id"]
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt_table.id
+}
