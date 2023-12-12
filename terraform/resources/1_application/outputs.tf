@@ -78,7 +78,7 @@ output "dhcp_options_id" {
 ################################################################################
 # VPC Module Application VPC b
 ################################################################################
-/*
+
 output "app_vpc_b_id" {
   description = "The ID of the VPC"
   value       = module.app_vpc_b.vpc_id
@@ -133,7 +133,7 @@ output "app_vpc_b_public_subnets_cidr_blocks" {
   description = "List of cidr_blocks of public subnets"
   value       = module.app_vpc_b.public_subnets_cidr_blocks
 }
-*/
+
 #---------------------------------------------------------------------------
 # Inspection VPC
 #---------------------------------------------------------------------------
