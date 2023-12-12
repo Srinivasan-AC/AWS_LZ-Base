@@ -28,7 +28,7 @@ app_vpc_a_vpc_tags = {
 }
 app_vpc_a_private_subnet_tags = {
 
-  ID = "app-vpc-a-tgw-private-subnet",
+  ID = "app-vpc-a-workload-private-subnet",
   "kubernetes.io/role/internal-elb" = 1
   
 }
@@ -45,22 +45,20 @@ app_vpc_a_intra_subnet_subnet_tags = {
 ########################################################################################################################
 # Application VPC B 
 #######################################################################################################################
-/*
+
 app_vpc_b_name                                 = "app_vpc_b"
-app_vpc_b_cidr                                 = "10.102.0.0/16"
-app_vpc_b_azs                                  = ["us-east-1a", "us-east-1b", "us-east-1c"]
-app_vpc_b_private_subnets                      = ["10.102.1.0/24", "10.102.2.0/24", "10.102.3.0/24"]
-app_vpc_b_public_subnets                       = ["10.102.4.0/24", "10.102.5.0/24", "10.102.6.0/24"]
-app_vpc_b_private_subnet_names                 = ["app_vpc_b_private_subnet1", "app_vpc_b_private_subnet2", "app_vpc_b_private_subnet3"]
-app_vpc_b_public_subnet_names                  = ["app_vpc_b_public_subnet1", "app_vpc_b_Public_subnet2", "app_vpc_b_public_subnet3"]
+app_vpc_b_cidr                                 = "10.30.0.0/16"
+app_vpc_b_azs                                  = ["us-east-1a", "us-east-1b"]
+app_vpc_b_private_subnets                      = ["10.30.1.0/24", "10.30.2.0/24"]
+app_vpc_b_intra_subnets                       = ["10.30.4.0/24", "10.30.5.0/24"]
+app_vpc_b_private_subnet_names                 = ["app-vpc-b-workload-us-east-1a", "app-vpc-b-workload-us-east-1b"]
+app_vpc_b_intra_subnet_names                  = ["app-vpc-b-tgw-us-east-1a", "app-vpc-b-tgw-us-east-1b"]
 app_vpc_b_create_igw                           = false
 app_vpc_b_enable_nat_gateway                   = false
-app_vpc_b_single_nat_gateway                   = false
+#app_vpc_b_single_nat_gateway                   = false
 app_vpc_b_enable_dns_hostnames                 = true
 app_vpc_b_enable_dns_support                   = true
 app_vpc_b_enable_dhcp_options                  = true
-app_vpc_b_dhcp_options_domain_name             = "service.consul"
-app_vpc_b_dhcp_options_domain_name_servers     = ["127.0.0.1", "10.10.0.2"]
 app_vpc_b_enable_flow_log                      = true
 app_vpc_b_create_flow_log_cloudwatch_log_group = true
 app_vpc_b_create_flow_log_cloudwatch_iam_role  = true
@@ -73,13 +71,14 @@ app_vpc_b_vpc_tags = {
 }
 app_vpc_b_private_subnet_tags = {
 
-  Name = "app-vpc-b-tgw-subnet"
+  ID = "app-vpc-b-workload-subnets",
+  "kubernetes.io/role/internal-elb" = 1
 }
-app_vpc_b_public_subnet_tags = {
+app_vpc_b_intra_subnet_tags = {
+  ID = "app-vpc-b-tgw-subnets"
+}
 
-  Name = "app-vpc-b-workload-subnet"
-}
-*/
+
 #######################################################################################################################
 # MGMT - VPC
 ######################################################################################################################
@@ -108,11 +107,11 @@ mgmt_vpc_vpc_tags = {
 }
 mgmt_vpc_private_subnet_tags = {
 
-  Name = "egress-tgw-subnets"
+  ID = "egress-tgw-subnets"
 }
 mgmt_vpc_public_subnet_tags = {
 
-  Name = "egress-PUB-subnets"
+  ID = "egress-PUB-subnets"
 }
 
 #######################################################################################################################
@@ -139,15 +138,15 @@ inspection_vpc_tags = {
   Environment = "dev"
 }
 inspection_vpc_vpc_tags = {
-  Name = "inspection_vpc"
+  ID = "inspection_vpc"
 }
 inspection_vpc_private_subnet_tags = {
 
-  Name = "inspection-tgw-subnet"
+  ID = "inspection-tgw-subnet"
 }
 inspection_vpc_public_subnet_tags = {
 
-  Name = "inspection-vpc-firewall-subnet"
+  ID = "inspection-vpc-firewall-subnet"
 }
 
 #######################################################################################################################

@@ -288,7 +288,7 @@ variable "app_vpc_a_intra_subnet_subnet_tags" {
 #----------------------------------------------------------------------------------------------------------------------
 # app_vpc_b
 #----------------------------------------------------------------------------------------------------------------------
-/*
+
 variable "app_vpc_b_cidr" {
   description = "Specify the CIDR range"
   type        = string
@@ -319,6 +319,12 @@ variable "app_vpc_b_public_subnets" {
   default     = []
 }
 
+variable "app_vpc_b_intra_subnets" {
+  description = "Specify list of intra subnets"
+  type        = list(string)
+  default     = []
+}
+
 variable "app_vpc_b_private_subnet_names" {
   description = "Specify list of private subnets names"
   type        = list(string)
@@ -327,6 +333,12 @@ variable "app_vpc_b_private_subnet_names" {
 
 variable "app_vpc_b_public_subnet_names" {
   description = "Specify list of public subnets names"
+  type        = list(string)
+  default     = []
+}
+
+variable "app_vpc_b_intra_subnet_names" {
+  description = "Specify list of intra subnets names"
   type        = list(string)
   default     = []
 }
@@ -420,7 +432,13 @@ variable "app_vpc_b_public_subnet_tags" {
   type        = map(string)
   default     = {}
 }
-*/
+
+variable "app_vpc_b_intra_subnet_tags" {
+  description = "Tags for the public subnet"
+  type        = map(string)
+  default     = {}
+}
+
 #----------------------------------------------------------------------------------------------------------------------
 # inspection_vpc
 #----------------------------------------------------------------------------------------------------------------------
