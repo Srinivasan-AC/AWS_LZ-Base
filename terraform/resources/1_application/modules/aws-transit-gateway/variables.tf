@@ -20,6 +20,12 @@ variable "create_tgw" {
   default     = true
 }
 
+variable "custom_route_table_not_required" {
+  description = "if need to created addtional route tables and default route table is not required then set this as false"
+  type        = bool
+  default     = true
+}
+
 variable "description" {
   description = "Description of the EC2 Transit Gateway"
   type        = string

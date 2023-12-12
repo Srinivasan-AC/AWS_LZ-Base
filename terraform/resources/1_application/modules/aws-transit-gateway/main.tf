@@ -88,7 +88,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "this" {
 ################################################################################
 
 resource "aws_ec2_transit_gateway_route_table" "this" {
-  count = var.create_tgw ? 1 : 0
+  count = var.create_tgw && var.custom_route_table_not_required ? 1 : 0
 
   transit_gateway_id = aws_ec2_transit_gateway.this[0].id
 

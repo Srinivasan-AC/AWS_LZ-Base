@@ -5,23 +5,29 @@
 module "tgw" {
   source = "./modules/aws-transit-gateway"
 
-  name            = var.transit_gateway_name
-  description     = var.tgw_description
-  amazon_side_asn = var.amazon_side_asn
+  name                                   = var.transit_gateway_name
+  description                            = var.tgw_description
+  amazon_side_asn                        = var.amazon_side_asn
+  enable_default_route_table_association = false
+  enable_default_route_table_propagation = false
+
   # When "true" there is no need for RAM resources if using multiple AWS accounts
   enable_auto_accept_shared_attachments = var.enable_auto_accept_shared_attachments
   # When "true", allows service discovery through IGMP
   enable_multicast_support = var.enable_multicast_support
+  # when default route table not required set below variable to false.
+  custom_route_table_not_required = false
 
   vpc_attachments = {
     app_vpc_a = {
-      vpc_id                                          = module.app_vpc_a.vpc_id
-      subnet_ids                                      = module.app_vpc_a.private_subnets
-      dns_support                                     = var.enable_dns_support
-      ipv6_support                                    = false
-      transit_gateway_default_route_table_association = false
-      transit_gateway_default_route_table_propagation = false
-      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+      vpc_id                 = module.app_vpc_a.vpc_id
+      subnet_ids             = module.app_vpc_a.intra_subnets
+      dns_support            = var.enable_dns_support
+      appliance_mode_support = true
+      ipv6_support           = false
+      # transit_gateway_default_route_table_association = false
+      # transit_gateway_default_route_table_propagation = false
+      transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt_table.id
       tags = {
         Name = "${var.transit_gateway_name}-app-vpc-a"
       }
@@ -39,27 +45,28 @@ module "tgw" {
     #   }
     # },
     inspection_vpc = {
-      vpc_id                                          = module.inspection_vpc.vpc_id
-      appliance_mode_support                          = true
-      subnet_ids                                      = module.inspection_vpc.private_subnets
-      transit_gateway_default_route_table_association = true
-      transit_gateway_default_route_table_propagation = true
-      ipv6_support                                    = false
-      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.inspection_vpc_rt_table.id
+      vpc_id                 = module.inspection_vpc.vpc_id
+      appliance_mode_support = true
+      subnet_ids             = module.inspection_vpc.private_subnets
+      # transit_gateway_default_route_table_association = true
+      # transit_gateway_default_route_table_propagation = true
+      ipv6_support                   = false
+      transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
       tags = {
         Name = "${var.transit_gateway_name}-inspection-vpc"
       }
     },
     mgmt_vpc = {
-      vpc_id                                          = module.mgmt_vpc.vpc_id
-      subnet_ids                                      = module.mgmt_vpc.private_subnets
-      dns_support                                     = var.enable_dns_support
-      transit_gateway_default_route_table_association = false
-      transit_gateway_default_route_table_propagation = false
-      ipv6_support                                    = false
-      transit_gateway_route_table_id                  = aws_ec2_transit_gateway_route_table.firewall_rt_table.id
+      vpc_id                 = module.mgmt_vpc.vpc_id
+      subnet_ids             = module.mgmt_vpc.private_subnets
+      dns_support            = var.enable_dns_support
+      appliance_mode_support = true
+      # transit_gateway_default_route_table_association = false
+      # transit_gateway_default_route_table_propagation = false
+      ipv6_support                   = false
+      transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt_table.id
       tags = {
-        Name = "${var.transit_gateway_name}-mgmt-vpc"
+        Name = "${var.transit_gateway_name}-egress-vpc"
       }
     }
   }
@@ -76,16 +83,16 @@ module "tgw" {
 #------------------------------------------------------------------------
 # Management Transit Gateway  Route Table
 #------------------------------------------------------------------------
-resource "aws_ec2_transit_gateway_route_table" "inspection_vpc_rt_table" {
+resource "aws_ec2_transit_gateway_route_table" "inspection_rt_table" {
   transit_gateway_id = module.tgw.ec2_transit_gateway_id
   tags = {
-    Name = "inspection-spoke-route-table"
+    Name = "inspection-route-table"
   }
 
 }
 
 resource "aws_ec2_transit_gateway_route" "inspection_vpc_route" {
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_vpc_rt_table.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.inspection_rt_table.id
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_attachment_id  = module.tgw.ec2_transit_gateway_vpc_attachment["inspection_vpc"]["id"]
   blackhole                      = false

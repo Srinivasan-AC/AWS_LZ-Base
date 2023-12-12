@@ -5,14 +5,9 @@ app_vpc_a_name                                 = "app_vpc_a"
 app_vpc_a_cidr                                 = "10.20.0.0/16"
 app_vpc_a_azs                                  = ["us-east-1a", "us-east-1b"]
 app_vpc_a_private_subnets                      = ["10.20.1.0/24", "10.20.2.0/24"]
-app_vpc_a_public_subnets                       = ["10.20.11.0/24", "10.20.12.0/24"]
-app_vpc_a_database_subnets                     = ["10.20.21.0/24", "10.20.22.0/24"]
 app_vpc_a_intra_subnets                        = ["10.20.31.0/24", "10.20.32.0/24"]
-app_vpc_a_private_subnet_names                 = ["app_vpc_a_private_subnet1", "app_vpc_a_private_subnet2"]
-app_vpc_a_public_subnet_names                  = ["app_vpc_a_public_subnet1", "app_vpc_a_Public_subnet2"]
-app_vpc_a_database_subnet_names                = ["app_vpc_a_database_subnet1", "app_vpc_a_database_subnet2"]
-app_vpc_a_intra_subnet_names                   = ["app_vpc_a_intra_subnet1", "app_vpc_a_intra_subnet2"]
-create_database_subnet_group                   = true
+app_vpc_a_private_subnet_names                 = ["app-vpc-a-workload-us-east-1a", "app-vpc-a-workload-us-east-1b"]
+app_vpc_a_intra_subnet_names                   = ["app-vpc-a-tgw-us-east-1a", "app-vpc-a-tgw-us-east-1b"]
 app_vpc_a_create_igw                           = false
 app_vpc_a_tgw_not_required                     = false
 app_vpc_a_enable_nat_gateway                   = false
@@ -23,53 +18,6 @@ app_vpc_a_enable_dhcp_options                  = true
 app_vpc_a_enable_flow_log                      = true
 app_vpc_a_create_flow_log_cloudwatch_log_group = true
 app_vpc_a_create_flow_log_cloudwatch_iam_role  = true
-
-# Public Subnet NACL
-app_vpc_a_public_dedicated_network_acl = true
-app_vpc_a_public_inbound_acl_rules = [
-  {
-    rule_number = 100
-    rule_action = "allow"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_block  = "0.0.0.0/0"
-  },
-]
-app_vpc_a_public_outbound_acl_rules = [
-  {
-    rule_number = 100
-    rule_action = "allow"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_block  = "0.0.0.0/0"
-  },
-]
-# Private Subnet NACL - 
-app_vpc_a_private_dedicated_network_acl = true
-app_vpc_a_private_inbound_acl_rules = [
-  {
-    rule_number = 100
-    rule_action = "allow"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1" # -1 indicates ICMP protocol
-    cidr_block  = "0.0.0.0/0"
-  },
-]
-app_vpc_a_private_outbound_acl_rules = [
-  {
-    rule_number = 100
-    rule_action = "allow"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_block  = "0.0.0.0/0"
-  },
-]
-app_vpc_a_private_acl_tags = { "Name" = "AQT_Seed_Team_NACL",
-"Project" = "AQT_Seed_Team_v1.0" }
 
 app_vpc_a_tags = {
   Owner       = "aqt"
@@ -84,18 +32,14 @@ app_vpc_a_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = 1
   
 }
-app_vpc_a_public_subnet_tags = {
+# app_vpc_a_public_subnet_tags = {
 
-  ID = "app-vpc-a-workload-subnet",
-  "kubernetes.io/role/elb" = 1
-}
-
-app_vpc_a_database_subnet_subnet_tags = {
-  ID = "app-vpc-a-database-subnet"
-}
+#   ID = "app-vpc-a-workload-subnet",
+#   "kubernetes.io/role/elb" = 1
+# }
 
 app_vpc_a_intra_subnet_subnet_tags = {
-  ID = "app-vpc-a-intra-subnet"
+  ID = "app-vpc-a-tgw-subnet"
 }
 
 ########################################################################################################################
@@ -139,16 +83,16 @@ app_vpc_b_public_subnet_tags = {
 #######################################################################################################################
 # MGMT - VPC
 ######################################################################################################################
-mgmt_vpc_name                                 = "mgmt_vpc"
+mgmt_vpc_name                                 = "Egress_vpc"
 mgmt_vpc_cidr                                 = "10.10.0.0/16"
 mgmt_vpc_azs                                  = ["us-east-1a", "us-east-1b"]
 mgmt_vpc_private_subnets                      = ["10.10.0.0/28", "10.10.0.16/28"]
-mgmt_vpc_public_subnets                       = ["10.10.2.0/24", "10.10.1.0/24"]
-mgmt_vpc_private_subnet_names                 = ["mgmt_vpc_private_subnet1", "mgmt_vpc_private_subnet2"]
-mgmt_vpc_public_subnet_names                  = ["mgmt_vpc_public_subnet1", "mgmt_vpc_Public_subnet2"]
+mgmt_vpc_public_subnets                       = ["10.10.1.0/24", "10.10.2.0/24"]
+mgmt_vpc_private_subnet_names                 = ["egress-tgw-us-east-1a", "egress-tgw-us-east-1b"]
+mgmt_vpc_public_subnet_names                  = ["egress-PUB-us-east-1a", "egress-PUB-us-east-1b"]
 mgmt_vpc_create_igw                           = true
 mgmt_vpc_enable_nat_gateway                   = true
-mgmt_vpc_single_nat_gateway                   = false
+#mgmt_vpc_single_nat_gateway                   = false
 mgmt_vpc_enable_dns_hostnames                 = true
 mgmt_vpc_enable_dns_support                   = true
 mgmt_vpc_enable_dhcp_options                  = true
@@ -160,15 +104,15 @@ mgmt_vpc_tags = {
   Environment = "dev"
 }
 mgmt_vpc_vpc_tags = {
-  Name = "mgmt_vpc"
+  Name = "egress_vpc"
 }
 mgmt_vpc_private_subnet_tags = {
 
-  Name = "mgmt-tgw-subnet"
+  Name = "egress-tgw-subnets"
 }
 mgmt_vpc_public_subnet_tags = {
 
-  Name = "mgmt-workload-subnet"
+  Name = "egress-PUB-subnets"
 }
 
 #######################################################################################################################
@@ -179,8 +123,8 @@ inspection_vpc_cidr                                 = "100.64.0.0/16"
 inspection_vpc_azs                                  = ["us-east-1a", "us-east-1b"]
 inspection_vpc_private_subnets                      = ["100.64.32.0/19", "100.64.64.0/19"]
 inspection_vpc_public_subnets                       = ["100.64.128.0/19", "100.64.160.0/19"]
-inspection_vpc_private_subnet_names                 = ["inspection_vpc_private_subnet1", "inspection_vpc_private_subnet2"]
-inspection_vpc_public_subnet_names                  = ["inspection_vpc_public_subnet1", "inspection_vpc_Public_subnet2"]
+inspection_vpc_private_subnet_names                 = ["inspection-tgw-us-east-1a", "inspection-tgw-us-east-1b"]
+inspection_vpc_public_subnet_names                  = ["inspection-FW-us-east-1a", "inspection-FW-us-east-1b"]
 inspection_vpc_create_igw                           = false
 inspection_vpc_enable_nat_gateway                   = false
 inspection_vpc_single_nat_gateway                   = false
