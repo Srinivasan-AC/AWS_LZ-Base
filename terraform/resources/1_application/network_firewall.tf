@@ -53,24 +53,26 @@ module "network_firewall" {
   create_logging_configuration             = var.create_logging_configuration #true
   logging_configuration_destination_config = local.logging_configuration_destination_config
 
-  # Policy
-  # policy_description = var.policy_description
-  # policy_name        = var.policy_name
-  # policy_stateful_rule_group_reference = {
-  #   one = { resource_arn = module.block_domains_fw_rule_group.arn }
-  #   #two = { resource_arn = module.et_open_rulselt_fw_rule_group.arn }
-  # }
-  # var.policy_stateful_rule_group_reference >> use this variable if need to provide ARN which is alreday created.
-  # above variable can be used to add aws managed stateful rule groups as well.
-  # policy_stateless_default_actions          = var.policy_stateless_default_actions          #["aws:forward_to_sfe"]
-  # policy_stateless_fragment_default_actions = var.policy_stateless_fragment_default_actions #["aws:forward_to_sfe"]
-  # policy_stateless_rule_group_reference = {
-  #   one = {
-  #     priority     = 1
-  #     resource_arn = module.drop_icmp_traffic_fw_rule_group.arn
-  #   }
+  #Policy
 
-  # }
+  policy_description = var.policy_description
+  policy_name        = var.policy_name
+  policy_stateful_rule_group_reference = {
+    one = { resource_arn = module.block_domains_fw_rule_group.arn }
+    #two = { resource_arn = module.et_open_rulselt_fw_rule_group.arn }
+  }
+  #var.policy_stateful_rule_group_reference >> use this variable if need to provide ARN which is alreday created.
+  #above variable can be used to add aws managed stateful rule groups as well.
+
+  policy_stateless_default_actions          = var.policy_stateless_default_actions          #["aws:forward_to_sfe"]
+  policy_stateless_fragment_default_actions = var.policy_stateless_fragment_default_actions #["aws:forward_to_sfe"]
+  policy_stateless_rule_group_reference = {
+    one = {
+      priority     = 1
+      resource_arn = module.drop_icmp_traffic_fw_rule_group.arn
+    }
+
+  }
 
   #var.policy_stateless_rule_group_reference >> use this variable if need to provide ARN which is alreday created.
 
@@ -82,20 +84,20 @@ module "network_firewall" {
 #--------------------------------------------------------------------------
 #  Drop ALL ICMP Traffic Rule Group
 #--------------------------------------------------------------------------
-# module "drop_icmp_traffic_fw_rule_group" {
-#   source = "./modules/aws-network-firewall/modules/rule-group"
+module "drop_icmp_traffic_fw_rule_group" {
+  source = "./modules/aws-network-firewall/modules/rule-group"
 
-#   name                       = "drop-icmp-traffic-fw-rule-group"
-#   description                = var.rulegroup_description_stateless
-#   type                       = "STATELESS"
-#   capacity                   = var.rulegroup_capacity_stateless
-#   rule_group                 = var.rule_group_stateless
-#   create_resource_policy     = var.create_rulegroup_resource_policy_stateless
-#   attach_resource_policy     = var.rulegroup_attach_resource_policy_stateless
-#   resource_policy_principals = var.rulegroup_resource_policy_principals_stateless
+  name                       = "drop-icmp-traffic-fw-rule-group"
+  description                = var.rulegroup_description_stateless
+  type                       = "STATELESS"
+  capacity                   = var.rulegroup_capacity_stateless
+  rule_group                 = var.rule_group_stateless
+  create_resource_policy     = var.create_rulegroup_resource_policy_stateless
+  attach_resource_policy     = var.rulegroup_attach_resource_policy_stateless
+  resource_policy_principals = var.rulegroup_resource_policy_principals_stateless
 
-#   tags = merge(local.tags, var.rulegroup_tags)
-# }
+  tags = merge(local.tags, var.rulegroup_tags)
+}
 
 
 # Network Firewall Rule Group - stateful
@@ -103,20 +105,20 @@ module "network_firewall" {
 #  Domain Deny list Rule Group
 #--------------------------------------------------------------------------
 
-# module "block_domains_fw_rule_group" {
-#   source = "./modules/aws-network-firewall/modules/rule-group"
+module "block_domains_fw_rule_group" {
+  source = "./modules/aws-network-firewall/modules/rule-group"
 
-#   name                       = "block-domains-fw-rule-group"
-#   description                = var.rulegroup_description_stateful_block_domains
-#   type                       = "STATEFUL"
-#   capacity                   = var.rulegroup_capacity_stateful_block_domains #capacity calculation required
-#   rule_group                 = var.rule_group_stateful_block_domains
-#   create_resource_policy     = var.create_rulegroup_resource_policy_stateful_block_domains
-#   attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_block_domains
-#   resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_block_domains
+  name                       = "block-domains-fw-rule-group"
+  description                = var.rulegroup_description_stateful_block_domains
+  type                       = "STATEFUL"
+  capacity                   = var.rulegroup_capacity_stateful_block_domains #capacity calculation required
+  rule_group                 = var.rule_group_stateful_block_domains
+  create_resource_policy     = var.create_rulegroup_resource_policy_stateful_block_domains
+  attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_block_domains
+  resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_block_domains
 
-#   tags = merge(local.tags, var.rulegroup_tags)
-# }
+  tags = merge(local.tags, var.rulegroup_tags)
+}
 
 #--------------------------------------------------------------------------
 #  Emerging Threat Rule Group  # commented to tshoot

@@ -200,10 +200,10 @@ rule_group_stateless = {
           actions = ["aws:drop"]
           match_attributes = {
             source = [{
-              address_definition = "0.0.0.0/0"
+              address_definition = "10.20.0.0/16"
             }]
             destination = [{
-              address_definition = "0.0.0.0/0"
+              address_definition = "10.20.0.0/16"
             }]
             protocols = [1]
           }
