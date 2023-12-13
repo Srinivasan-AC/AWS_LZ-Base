@@ -346,12 +346,12 @@ output "firewall_policy_resource_policy_id" {
 # AWS GuardDuty outputs
 ######################################################################################################################
 
-# output "guardduty_detector" {
-#   value = module.guardduty.guardduty_detector
-# }
-# output "sns_topic" {
-#   value = module.guardduty.sns_topic
-# }
+output "guardduty_detector" {
+  value = module.guardduty.guardduty_detector
+}
+output "sns_topic" {
+  value = module.guardduty.sns_topic
+}
 
 #######################################################################################
 # Cloudtrail Outputs
@@ -391,57 +391,57 @@ output "cloudtrail_bucket_arn" {
 # AWS inspector outputs
 ######################################################################################
 
-# output "inspector_assessment_target" {
-#   description = "The AWS Inspector assessment target"
-#   value       = module.inspector.inspector_assessment_target
-# }
+output "inspector_assessment_target" {
+  description = "The AWS Inspector assessment target"
+  value       = module.inspector.inspector_assessment_target
+}
 
-# output "aws_inspector_assessment_template" {
-#   description = "The AWS Inspector assessment template"
-#   value       = module.inspector.aws_inspector_assessment_template
-# }
+output "aws_inspector_assessment_template" {
+  description = "The AWS Inspector assessment template"
+  value       = module.inspector.aws_inspector_assessment_template
+}
 
-# output "aws_cloudwatch_event_rule" {
-#   description = "The AWS Inspector event rule"
-#   value       = module.inspector.aws_cloudwatch_event_rule
-# }
+output "aws_cloudwatch_event_rule" {
+  description = "The AWS Inspector event rule"
+  value       = module.inspector.aws_cloudwatch_event_rule
+}
 
-# output "aws_cloudwatch_event_target" {
-#   description = "The AWS Inspector event target"
-#   value       = module.inspector.aws_cloudwatch_event_target
-# }
+output "aws_cloudwatch_event_target" {
+  description = "The AWS Inspector event target"
+  value       = module.inspector.aws_cloudwatch_event_target
+}
 
 ################################################################################
 # AWS Security Hub Outputs
 ##################################################################################
-# output "enabled_subscriptions" {
-#   description = "Enabled subscriptions"
-#   value       = module.security_hub.enabled_subscriptions
-# }
+output "enabled_subscriptions" {
+  description = "Enabled subscriptions"
+  value       = module.security_hub.enabled_subscriptions
+}
 
-# output "sns_topic_securityhub" {
-#   value = module.security_hub.sns_topic
-# }
+output "sns_topic_securityhub" {
+  value = module.security_hub.sns_topic
+}
 
 #####################################################################################################################
 # AWS Config Outputs
 #####################################################################################################################
-# output "rules_applied" {
-#   description = "A list of Config Rules applied by the module"
-#   value       = keys(module.managed_rules.rules[0])
-# }
+output "rules_applied" {
+  description = "A list of Config Rules applied by the module"
+  value       = keys(module.managed_rules.rules[0])
+}
 
-# output "bucket_id" {
-#   value       = module.config_logs.bucket_id
-#   description = "Bucket ID"
-# }
+output "bucket_id" {
+  value       = module.config_logs.bucket_id
+  description = "Bucket ID"
+}
 
-# output "bucket_arn" {
-#   value       = module.config_logs.bucket_arn
-#   description = "Bucket ARN"
-# }
+output "bucket_arn" {
+  value       = module.config_logs.bucket_arn
+  description = "Bucket ARN"
+}
 
-# output "bucket_domain_name" {
-#   value       = module.config_logs.bucket_domain_name
-#   description = "FQDN of bucket"
-# }
+output "bucket_domain_name" {
+  value       = module.config_logs.bucket_domain_name
+  description = "FQDN of bucket"
+}
