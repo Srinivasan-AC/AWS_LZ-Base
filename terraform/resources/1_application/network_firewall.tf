@@ -59,7 +59,7 @@ module "network_firewall" {
   policy_name        = var.policy_name
   policy_stateful_rule_group_reference = {
     one = { resource_arn = module.block_domains_fw_rule_group.arn }
-    two = { resource_arn = module.et_open_rulselt_fw_rule_group.arn }
+    #two = { resource_arn = module.et_open_rulselt_fw_rule_group.arn }
   }
 
   #var.policy_stateful_rule_group_reference >> use this variable if need to provide ARN which is alreday created.
@@ -124,20 +124,20 @@ module "block_domains_fw_rule_group" {
 #--------------------------------------------------------------------------
 #  Emerging Threat Rule Group  # commented to tshoot
 #--------------------------------------------------------------------------
-module "et_open_rulselt_fw_rule_group" {
-  source = "./modules/aws-network-firewall/modules/rule-group"
+# module "et_open_rulselt_fw_rule_group" {
+#   source = "./modules/aws-network-firewall/modules/rule-group"
 
-  name                       = "et-open-rulselt-fw-rule-group"
-  description                = var.rulegroup_description_stateful_open_rulselt
-  type                       = "STATEFUL"
-  capacity                   = var.rulegroup_capacity_stateful_open_rulselt #capacity calculation required
-  rules                      = file("./rules/emerging-user-agents.rules")
-  create_resource_policy     = var.create_rulegroup_resource_policy_stateful_open_rulselt
-  attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_open_rulselt
-  resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_open_rulselt
+#   name                       = "et-open-rulselt-fw-rule-group"
+#   description                = var.rulegroup_description_stateful_open_rulselt
+#   type                       = "STATEFUL"
+#   capacity                   = var.rulegroup_capacity_stateful_open_rulselt #capacity calculation required
+#   rules                      = file("./rules/emerging-user-agents.rules")
+#   create_resource_policy     = var.create_rulegroup_resource_policy_stateful_open_rulselt
+#   attach_resource_policy     = var.rulegroup_attach_resource_policy_stateful_open_rulselt
+#   resource_policy_principals = var.rulegroup_resource_policy_principals_stateful_open_rulselt
 
-  tags = merge(local.tags, var.rulegroup_tags)
-}
+#   tags = merge(local.tags, var.rulegroup_tags)
+# }
 
 #--------------------------------------------------------------------------
 #  Block Public DNS Resolvers  Rule Group
