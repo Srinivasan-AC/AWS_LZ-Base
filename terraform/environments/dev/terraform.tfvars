@@ -228,8 +228,7 @@ rule_group_stateful_block_domains = {
       key = "HOME_NET"
       ip_set = {
         definition = [
-          "10.0.0.0/16",   #module.app_vpc_a.vpc_cidr_block,
-          "10.102.0.0/16", #module.app_vpc_b.vpc_cidr_block,
+          "10.20.0.0/16", 
         ]
       }
     }]
