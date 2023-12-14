@@ -16,9 +16,11 @@ module "app_vpc_a" {
   azs             = var.app_vpc_a_azs #["${local.region}a", "${local.region}b", "${local.region}c"]
   private_subnets = var.app_vpc_a_private_subnets
   intra_subnets   = var.app_vpc_a_intra_subnets
+  public_subnets  = var.app_vpc_a_public_subnets
 
   private_subnet_names = var.app_vpc_a_private_subnet_names
   intra_subnet_names   = var.app_vpc_a_intra_subnet_names
+  public_subnet_names  = var.app_vpc_a_public_subnet_names
 
   # IGW
   create_igw = var.app_vpc_a_create_igw
@@ -68,6 +70,18 @@ resource "aws_route" "app_vpc_a_tgw_route_private" {
 resource "aws_route" "app_vpc_a_tgw_route_intra" {
   count                  = length(module.app_vpc_a.intra_route_table_ids)
   route_table_id         = module.app_vpc_a.intra_route_table_ids[count.index]
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = module.tgw.ec2_transit_gateway_id
+
+  depends_on = [
+    module.tgw,
+    module.app_vpc_a,
+  ]
+}
+
+resource "aws_route" "app_vpc_a_tgw_route_public" {
+  count                  = length(module.app_vpc_a.public_route_table_ids)
+  route_table_id         = module.app_vpc_a.public_route_table_ids[count.index]
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = module.tgw.ec2_transit_gateway_id
 

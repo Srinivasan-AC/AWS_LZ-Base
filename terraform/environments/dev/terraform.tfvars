@@ -6,8 +6,10 @@ app_vpc_a_cidr                                 = "10.20.0.0/16"
 app_vpc_a_azs                                  = ["us-east-1a", "us-east-1b"]
 app_vpc_a_private_subnets                      = ["10.20.1.0/24", "10.20.2.0/24"]
 app_vpc_a_intra_subnets                        = ["10.20.31.0/24", "10.20.32.0/24"]
+app_vpc_a_public_subnets                       = ["10.20.21.0/24", "10.20.22.0/24"]
 app_vpc_a_private_subnet_names                 = ["app-vpc-a-workload-us-east-1a", "app-vpc-a-workload-us-east-1b"]
 app_vpc_a_intra_subnet_names                   = ["app-vpc-a-tgw-us-east-1a", "app-vpc-a-tgw-us-east-1b"]
+app_vpc_a_public_subnet_names                  = ["app-vpc-a-pub-us-east-1a", "app-vpc-a-pub-us-east-1b"]
 app_vpc_a_create_igw                           = false
 app_vpc_a_tgw_not_required                     = false
 app_vpc_a_enable_nat_gateway                   = false
@@ -32,11 +34,11 @@ app_vpc_a_private_subnet_tags = {
   "kubernetes.io/role/internal-elb" = 1
   
 }
-# app_vpc_a_public_subnet_tags = {
+app_vpc_a_public_subnet_tags = {
 
-#   ID = "app-vpc-a-workload-subnet",
-#   "kubernetes.io/role/elb" = 1
-# }
+  ID = "app-vpc-a-public-subnet",
+  "kubernetes.io/role/elb" = 1
+}
 
 app_vpc_a_intra_subnet_subnet_tags = {
   ID = "app-vpc-a-tgw-subnet"
