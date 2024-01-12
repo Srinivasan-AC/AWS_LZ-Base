@@ -160,9 +160,9 @@ amazon_side_asn                       = 64532
 enable_auto_accept_shared_attachments = true
 enable_multicast_support              = false
 enable_dns_support                    = true
-ram_allow_external_principals         = true
-ram_principals                        = ["307990089504"]
-share_tgw                             = true
+# ram_allow_external_principals         = true
+# ram_principals                        = ["199218232934"]
+share_tgw                             = false
 create_tgw                            = true
 
 #######################################################################################################################
