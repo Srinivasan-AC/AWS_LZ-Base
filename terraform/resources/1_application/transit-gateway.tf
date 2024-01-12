@@ -72,8 +72,8 @@ module "tgw" {
     }
   }
 
-  # ram_allow_external_principals = var.ram_allow_external_principals
-  # ram_principals                = var.ram_principals
+  ram_allow_external_principals = var.ram_allow_external_principals
+  ram_principals                = var.ram_principals
   share_tgw                     = var.share_tgw
   create_tgw                    = var.create_tgw
 
