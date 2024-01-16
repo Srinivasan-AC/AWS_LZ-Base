@@ -17,7 +17,7 @@ include:
       - 'templates/terraform.yml'
   #- template: Jobs/SAST-IaC.latest.gitlab-ci.yml
   - template: Security/SAST-IaC.latest.gitlab-ci.yml
-  
+
 .rules-config:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
@@ -113,10 +113,10 @@ aws-auth:
   dependencies: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
   needs: ["vault-job","0-terraform-init","1-terraform-fmt","2-terraform-validate","3-terraform-plan" ]
 
-# kics-iac-sast:
-#   extends:
-#     - iac-sast
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#     - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_REF_NAME == 'main'
+kics-iac-sast:
+  extends:
+    - iac-sast
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_REF_NAME == 'main'
 
