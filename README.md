@@ -18,7 +18,7 @@ cd existing_repo
 #git remote add origin https://gitlab.tmmcops.com/aqt/aws-landing-zone.git
 
 git remote add origin https://github.com/Srinivasan-AC/AWS_LZ-Base/
-aws-landing-zone.gitgit branch -M main
+git branch -M main
 git push -uf origin main
 ```
 
